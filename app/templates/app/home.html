@@ -1,0 +1,11 @@
+{% extends 'app/base.html' %}
+{%  block content %}
+    {% if user.is_authenticated %}
+    <p>Welcome, {{ user.get_username }}. Thanks for logging in.</p>
+{% else %}
+    <p>Welcome, new user. Please log in.</p>
+{% endif %}
+<h1>Witaj {{ user.first_name }} {{ context.users }} {{ context.issues }} {{ context.closed_issues }}</h1>
+    <i class="material-icons" style="font-size:48px;">cloud</i>
+    <span class="material-icons">login</span>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Zgłoszenia:</h1>
+  </div>
+</div>
+
+
+</div>
+  <h1>Book List</h1>
+  {% if issues %}
+  <ul>
+    {% for issue in issues %}
+    <div class="container-lg">
+<div class="card">
+  <div class="card-body elegant-color white-text rounded-bottom">
+
+    <!-- Social shares button -->
+    <a class="activator waves-effect mr-4"><i class="fas fa-share-alt white-text"></i></a>
+    <!-- Title -->
+    <h4 class="card-title text-primary">{{ issue.title }}</h4>
+    <hr class="hr-light">
+    <!-- Text -->
+      <div class="text-secondary"><p><i class="material-icons material-icons-menu">calendar_today</i>{{ isssue.date_start}}</p><p><i class="material-icons material-icons-menu">account_circle</i>{{ object.user_id.name }} {{ object.user_id.surname }}</p></div>
+    <!-- Link -->
+    <a href="{{ issue.get_absolute_url }}" class="white-text d-flex justify-content-end">
+      <h5>Read more <i class="fas fa-angle-double-right"></i></h5>
+    </a>
+  </div>
+</div>
+        </div>
+    {% endfor %}
+  {% else %}
+    <p>There are no books in the library.</p>
+  {% endif %}
+{% endblock %}
