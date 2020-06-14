@@ -1,13 +1,8 @@
 {% extends 'app/base.html' %}
 {% load static %}
 {% block content %}
-<div class="jumbotron container-lg">
-  <div class="container">
-    <h1 class="display-4">Zgłoszenia:</h1>
-  </div>
-</div>
+    <div class="container-lgs">
   {% if issues %}
-  <ul>
     {% for i in issues %}
     <div class="container-lg">
 <div class="card my-3">
@@ -77,4 +72,5 @@
     </ul>
 </nav>
 {% endif %}
+</div>
   {% endblock %}

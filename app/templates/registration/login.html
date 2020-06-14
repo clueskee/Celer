@@ -2,6 +2,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
+    <div class="container">
     <link href="{% static 'css/signin.css' %}" rel="stylesheet">
   <container class="text-center mb-2">
     <form class="form-signin" method="post">
@@ -14,4 +15,5 @@
       <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
     </form>
   </container>
+    </div>
 {% endblock %}
