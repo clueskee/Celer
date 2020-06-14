@@ -1,31 +1,29 @@
 {% extends 'app/base.html' %}
 {% load static %}
 {% block content %}
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron container-lg">
   <div class="container">
     <h1 class="display-4">Zgłoszenia:</h1>
   </div>
 </div>
-
-
-</div>
-  <h1>Book List</h1>
   {% if issues %}
   <ul>
-    {% for issue in issues %}
+    {% for i in issues %}
     <div class="container-lg">
-<div class="card">
+<div class="card my-3">
   <div class="card-body elegant-color white-text rounded-bottom">
 
     <!-- Social shares button -->
     <a class="activator waves-effect mr-4"><i class="fas fa-share-alt white-text"></i></a>
     <!-- Title -->
-    <h4 class="card-title text-primary">{{ issue.title }}</h4>
+    <h4 class="card-title text-primary">{{ i.title }}</h4>
     <hr class="hr-light">
     <!-- Text -->
-      <div class="text-secondary"><p><i class="material-icons material-icons-menu">calendar_today</i>{{ isssue.date_start}}</p><p><i class="material-icons material-icons-menu">account_circle</i>{{ object.user_id.name }} {{ object.user_id.surname }}</p></div>
+      {{ isssue.date_start }}
+      <div class="text-secondary"><p><i class="material-icons material-icons-menu">calendar_today</i>{{ i.date_start }}</p><p><i class="material-icons material-icons-menu">account_circle</i>{{ i.user_id.name }} {{ i.user_id.surname }}</p></div>
+      <div> {{ i.description|safe|truncatewords:10 }}</div>
     <!-- Link -->
-    <a href="{{ issue.get_absolute_url }}" class="white-text d-flex justify-content-end">
+    <a href="{{ i.get_absolute_url }}" class="white-text d-flex justify-content-end">
       <h5>Read more <i class="fas fa-angle-double-right"></i></h5>
     </a>
   </div>
@@ -35,4 +33,48 @@
   {% else %}
     <p>There are no books in the library.</p>
   {% endif %}
-{% endblock %}
+{% if is_paginated %}
+<nav aria-label="Page navigation example">
+<div class="container my-4"></div>
+    <ul class="pagination justify-content-center pagination">
+        {% if page_obj.has_previous %}
+          <!-- If it ain't a search result display, don't append the search query
+               to the URL. -->
+          {% if not search %}
+          <li class="page-item">
+              <a class="page-link" href="{% url 'app:list_issues' %}?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          {% else %}
+          <!-- Append the searched query to the URL, so that on a search results page,
+               the pagination don't revert to listing all the listview items. -->
+            <li class="page-item">
+              <a class="page-link" href="{% url 'app:list_issues' %}?{{search}}&page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          {% endif %}
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+        </li>
+        {% endif %}
+        {% for object in page_obj.paginator.page_range %}
+            <li class="page-item"><a class="page-link" href="{% url 'app:list_issues' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+          {% if not search %}
+          <li class="page-item">
+              <a class="page-link" href="{% url 'app:list_issues' %}?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="{% url 'app:list_issues' %}?{{search}}&page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% endif %}
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+  {% endblock %}
