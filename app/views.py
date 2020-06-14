@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.views import View
-from django.views.generic import FormView, DetailView, ListView
+from django.views.generic import FormView, DetailView, ListView, CreateView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect
 from .models import Issue
@@ -44,7 +44,6 @@ class AddIssue(FormView):
         issue.save()
         return redirect(reverse_lazy('app:show_issue', kwargs={'pk':issue.id}))
 
-
 class ShowIssue(DetailView):
     # TODO pokazywanie plików z uploadu
     model = Issue
@@ -53,3 +52,4 @@ class IssueList(ListView):
     template_name = 'app/issue_list.html'
     queryset = Issue.objects.all()
     context_object_name = 'issues'
+    paginate_by = 10

@@ -38,7 +38,7 @@ class Issue(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     def get_absolute_url(self):
         # return f"{self.id}"
-        return reverse('app:show_issue', args=[str(self.id)])
+        return reverse('app:show_issue', args=[self.id])
 
 class Comments(models.Model):
     id = models.IntegerField(primary_key=True)
