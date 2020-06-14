@@ -4,6 +4,9 @@
 
 {% block content %}
 <div class="container">
+    {% if error %}
+        <div>{{error}}</div>
+    {% endif %}
   <form method="post">
     {% csrf_token %}
     {{ form|crispy }}

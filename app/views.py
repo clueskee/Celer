@@ -20,35 +20,28 @@ class HomeView(View):
                    }
         return render(request, 'app/home.html', {'context':context})
 
+from django.contrib.auth import login
 class AddIssue(FormView):
-    # TODO Upload plików
     form_class = AddIssueForm
     template_name = 'app/add_issue.html'
-    success_url = reverse_lazy('app:show_issue')
-
-    # def get_success_url(self):
-    #     return reverse_lazy('app:show_issue', kwargs={'pk': issue.id})
-
-    def get_form_kwargs(self):
-        kwargs = super(AddIssue, self).get_form_kwargs()
-        kwargs.update({'user_id': self.request.user})
-        return kwargs
-
     def form_valid(self, form):
         issue = form.instance
-        issue.user_id = User.objects.get(pk = self.user.id)
-        # issue = Issue.objects.create(
-        # title = form.cleaned_data['title'],
-        # description = form.cleaned_data['description'],
-        # email = form.cleaned_data['email'],
-        # priority = form.cleaned_data['priority'],
-        # status = form.cleaned_data['status'],
-        # user_id = User.objects.get(pk = self.request.user.id),
-        # )
-
-        print(issue.save())
-        print(issue)
-        print(issue.id)
+        try:
+            # issue.user = self.request.user # TODO: sprawdzić czy działa poprawnie
+            issue.user = User.objects.get(pk = self.request.user.id)
+        except Exception as e:
+            try:
+                issue.user = User.objects.get(email = issue.email)
+            except Exception as e:
+                user_name,user_domain = issue.email.split('@',2)
+                user = User.objects.create_user(
+                    username = user_name,
+                    email = issue.email
+                )
+                issue.user = user
+                # return render(self.request, self.template_name, {'form':form, 'error': 'Nie mogę dopasować usera! Sprawdź email lub zaloguj się.'})
+            # login(self.request,issue.user)
+        issue.save()
         return redirect(reverse_lazy('app:show_issue', kwargs={'pk':issue.id}))
 
 

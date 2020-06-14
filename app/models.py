@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from app.choices import PRIORITY, STATUS
 
+from django.contrib.auth.models import User
 
 class Company(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -16,17 +17,16 @@ class Company(models.Model):
     address = models.CharField(max_length=256, null=True)
     phone = models.CharField(max_length=32, null=True)
 
-class User(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=64, null=True)
-    surname = models.CharField(max_length=64, null=True)
-    email = models.EmailField(max_length=254)
-    phone = models.CharField(max_length=32, null=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+# class User(models.Model):
+#     id = models.IntegerField(primary_key=True)
+#     name = models.CharField(max_length=64, null=True)
+#     surname = models.CharField(max_length=64, null=True)
+#     email = models.EmailField(max_length=254)
+#     phone = models.CharField(max_length=32, null=True)
+#     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 class Issue(models.Model):
-    id = models.IntegerField(primary_key=True)
-    issue_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     title =  models.CharField(max_length=256, null=False)
     email = models.EmailField(max_length=254, null=False)
     description = HTMLField('Description')
@@ -35,8 +35,7 @@ class Issue(models.Model):
     priority = models.IntegerField(choices=PRIORITY, default=1)
     status = models.IntegerField(choices=STATUS, default=1)
     active = models.BooleanField(default=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     def get_absolute_url(self):
         # return f"{self.id}"
         return reverse('app:show_issue', args=[str(self.id)])
