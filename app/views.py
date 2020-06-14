@@ -20,27 +20,37 @@ class HomeView(View):
                    }
         return render(request, 'app/home.html', {'context':context})
 
-class AddIssue(View):
+class AddIssue(FormView):
     # TODO Upload plików
     form_class = AddIssueForm
+    template_name = 'app/add_issue.html'
+    success_url = reverse_lazy('app:show_issue')
 
-    def get(self, request):
-        context = {'form': self.form_class()}
-        return render(request, 'app/add_issue.html', context)
+    # def get_success_url(self):
+    #     return reverse_lazy('app:show_issue', kwargs={'pk': issue.id})
 
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            issue = Issue()
-            issue.title = form.cleaned_data['title']
-            issue.description = form.cleaned_data['description']
-            issue.email = form.cleaned_data['email']
-            issue.priority = form.cleaned_data['priority']
-            issue.status = form.cleaned_data['status']
-            issue.user_id = User.objects.get(pk=request.user.id)
-            issue.save()
-            breakpoint()
-        return redirect(issue.get_absolute_url())
+    def get_form_kwargs(self):
+        kwargs = super(AddIssue, self).get_form_kwargs()
+        kwargs.update({'user_id': self.request.user})
+        return kwargs
+
+    def form_valid(self, form):
+        issue = form.instance
+        issue.user_id = User.objects.get(pk = self.user.id)
+        # issue = Issue.objects.create(
+        # title = form.cleaned_data['title'],
+        # description = form.cleaned_data['description'],
+        # email = form.cleaned_data['email'],
+        # priority = form.cleaned_data['priority'],
+        # status = form.cleaned_data['status'],
+        # user_id = User.objects.get(pk = self.request.user.id),
+        # )
+
+        print(issue.save())
+        print(issue)
+        print(issue.id)
+        return redirect(reverse_lazy('app:show_issue', kwargs={'pk':issue.id}))
+
 
 class ShowIssue(DetailView):
     # TODO pokazywanie plików z uploadu
