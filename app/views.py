@@ -20,58 +20,29 @@ class HomeView(View):
                    }
         return render(request, 'app/home.html', {'context':context})
 
-# class AddIssue(CreateView):
-#     # TODO Upload plików
-#     form_class = AddIssueForm
-#     template_name = 'app/add_issue.html'
-#     # success_url = get_success_url()
-#
-#     # def get_success_url(self):
-#     #     return reverse_lazy('app:show_issue', kwargs={'pk': issue.id})
-#
-#     # def get_form_kwargs(self):
-#     #     kwargs = super(AddIssue, self).get_form_kwargs()
-#     #     kwargs.update({'user_id': self.request.user})
-#     #     return kwargs
-#
-#     # def get_user(request):
-#     #     if not hasattr(request, '_cached_user'):
-#     #         request._cached_user = auth.get_user(request)
-#     #     return request._cached_user
-#
-#     def get_success_url(self):
-#         return reverse('book-detail', kwargs={'pk': self.object.pk})
-#
-#     def form_valid(self, form):
-#         # issue = form.instance
-#         # issue.user_id = self.request.user
-#         issue = Issue.objects.create(
-#         title = form.cleaned_data['title'],
-#         description = form.cleaned_data['description'],
-#         email = form.cleaned_data['email'],
-#         priority = form.cleaned_data['priority'],
-#         status = form.cleaned_data['status'],
-#         user_id = User.objects.get(pk = self.request.user.id),
-#         )
-#
-#         issue.save()
-#         # print(issue)
-#         # print(issue.id)
-#         # return redirect(reverse_lazy('app:show_issue', kwargs={'pk':issue.id}))
-
-class AddIssue(CreateView):
-    template_name = 'app/add_issue.html'
+from django.contrib.auth import login
+class AddIssue(FormView):
     form_class = AddIssueForm
-
-    # def get_initial(self, *args, **kwargs):
-    #     initial = super(AddIssue, self).get_initial(**kwargs)
-    #     initial['user_id'] = self.request.user
-    #     breakpoint()
-    #     return initial
-    def get_form_kwargs(self):
-        kwargs = super(AddIssue, self).get_form_kwargs()
-        kwargs['user_id'] = User.objects.get(pk=self.user.id)
-        return kwargs
+    template_name = 'app/add_issue.html'
+    def form_valid(self, form):
+        issue = form.instance
+        try:
+            # issue.user = self.request.user # TODO: sprawdzić czy działa poprawnie
+            issue.user = User.objects.get(pk = self.request.user.id)
+        except Exception as e:
+            try:
+                issue.user = User.objects.get(email = issue.email)
+            except Exception as e:
+                user_name,user_domain = issue.email.split('@',2)
+                user = User.objects.create_user(
+                    username = user_name,
+                    email = issue.email
+                )
+                issue.user = user
+                # return render(self.request, self.template_name, {'form':form, 'error': 'Nie mogę dopasować usera! Sprawdź email lub zaloguj się.'})
+            # login(self.request,issue.user)
+        issue.save()
+        return redirect(reverse_lazy('app:show_issue', kwargs={'pk':issue.id}))
 
 class ShowIssue(DetailView):
     # TODO pokazywanie plików z uploadu

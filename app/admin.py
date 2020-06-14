@@ -1,13 +1,9 @@
 from django.contrib import admin
 
-from .models import User, Issue, Comments, Company
+from .models import Issue, Comments, Company
 
 @admin.register(Issue)
 class IssueModelAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(User)
-class UserModelAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Comments)
