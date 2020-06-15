@@ -15,11 +15,12 @@
     <hr class="hr-light">
     <!-- Text -->
       {{ isssue.date_start }}
-      <div class="text-secondary"><p><i class="material-icons material-icons-menu">calendar_today</i>{{ i.date_start }}</p><p><i class="material-icons material-icons-menu">account_circle</i>{{ i.user_id.name }} {{ i.user_id.surname }}</p></div>
-      <div> {{ i.description|safe|truncatewords:10 }}</div>
+      <div class="text-secondary my-3"><p><i class="material-icons material-icons-menu">calendar_today</i>{{ i.date_start }}</p><p><i class="material-icons material-icons-menu">account_circle</i>{{ i.user }}{%  if i.user.name %}{{ i.user.name }} {{ i.user.surname }}{% else %} (brak danych){% endif %}</p></div>
+
+      <div> {{ i.description|truncatewords_html:10|safe }}</div>
     <!-- Link -->
     <a href="{{ i.get_absolute_url }}" class="white-text d-flex justify-content-end">
-      <h5>Read more <i class="fas fa-angle-double-right"></i></h5>
+      Szczegóły > <i class="fas fa-angle-double-right"></i>
     </a>
   </div>
 </div>

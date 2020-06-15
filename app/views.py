@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.views import View
-from django.views.generic import FormView, DetailView, ListView, CreateView
+from django.views.generic import FormView, DetailView, ListView, CreateView, UpdateView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect
 from .models import Issue
@@ -53,3 +53,10 @@ class IssueList(ListView):
     queryset = Issue.objects.all()
     context_object_name = 'issues'
     paginate_by = 10
+
+class IssueUpdateView(UpdateView):
+    model = Issue
+    fields = ['title',
+              'description',
+              'priority',
+              'status']

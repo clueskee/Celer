@@ -36,6 +36,7 @@ class Issue(models.Model):
     status = models.IntegerField(choices=STATUS, default=1)
     active = models.BooleanField(default=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+
     def get_absolute_url(self):
         # return f"{self.id}"
         return reverse('app:show_issue', args=[self.id])
