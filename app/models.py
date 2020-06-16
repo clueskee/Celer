@@ -35,6 +35,7 @@ class Issue(models.Model):
     active = models.BooleanField(default=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
+    # TODO: Sprawdź czy to najlepszy sposób:
     def get_absolute_url(self):
         # return f"{self.id}"
         return reverse('app:show_issue', args=[self.id])
@@ -43,4 +44,11 @@ class Comments(models.Model):
     id = models.IntegerField(primary_key=True)
     content = HTMLField('Content')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name='comments')
+    creation_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering =['creation_date']
+
+    def __str__(self):
+        return '{} [{}]'.format(self.content, self.user)

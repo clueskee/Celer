@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import EmailValidator
 from crispy_forms.helper import FormHelper
-from .models import Issue
+from .models import Issue, Comments
 from django.contrib.auth.forms import AuthenticationForm
 
 class UserLoginForm(AuthenticationForm):
@@ -30,3 +30,9 @@ class AddIssueForm(forms.ModelForm):
                   'priority',
                   'status',
                   'description']
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model=Comments
+        fields = ('content',)

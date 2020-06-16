@@ -1,26 +1,55 @@
 {% extends 'app/base.html' %}
 {% load static %}
-{%  block content %}
-<div class="container-lg">
-<div class="card">
-  <div class="card-body elegant-color white-text rounded-bottom">
+{% block content %}
 
-    <!-- Social shares button -->
-    <a class="activator waves-effect mr-4"><i class="fas fa-share-alt white-text"></i></a>
-    <!-- Title -->
-    <h4 class="card-title text-primary">{{ object.title }}</h4>
-    <hr class="hr-light">
-    <!-- Text -->
-      <div class="text-secondary"><p><i class="material-icons material-icons-menu">calendar_today</i>{{ object.date_start}}</p><p><i class="material-icons material-icons-menu">account_circle</i>{{ object.user_id.name }} {{ object.user_id.surname }}</p></div>
+    <div class="container-lg">
+        <div class="card">
+            <div class="card-body elegant-color white-text rounded-bottom">
 
-    <p class="card-text mb-4">{{ object.description|safe}}</p>
-    <!-- Link -->
-<div class="float-right"><button type="button" class="btn btn-success">Zamknij</button>
-    <a href="" class="btn btn-outline-warning" role="button" >Link</a>
-    <button type="button" class="btn btn-danger">Usuń</button>
-</div>
-  </div>
+                <!-- Social shares button -->
+                <a class="activator waves-effect mr-4"><i class="fas fa-share-alt white-text"></i></a>
+                <!-- Title -->
+                <h4 class="card-title text-primary">{{ object.title }}</h4>
+                <hr class="hr-light">
+                <!-- Text -->
+                <div class="text-secondary"><p><i
+                        class="material-icons material-icons-menu">calendar_today</i>{{ object.date_start }}</p>
+                    <p>
+                        <i class="material-icons material-icons-menu">account_circle</i>{{ object.user_id.name }} {{ object.user_id.surname }}
+                    </p></div>
 
-</div>
-</div>
+                <p class="card-text mb-4">{{ object.description|safe }}</p>
+                <!-- Link -->
+                <div class="float-right">
+                    <button type="button" class="btn btn-success">Zamknij</button>
+                    <a href="" class="update-issue btn btn-warning" role="button" name="button">Zmień</a>
+                    <button class="delete-issue btn btn-danger" type="button" name="button">Usuń</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Create book button -->
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".delete-issue").modalForm({
+                formURL: "{% url 'app:delete_issue' object.id %}"
+            });
+
+            $(".update-issue").modalForm( {
+                formURL: "{% url 'app:update_issue' object.id %}"
+            });
+        });
+    </script>
 {% endblock %}

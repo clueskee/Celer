@@ -3,7 +3,7 @@ from django.views import View
 from django.views.generic import FormView, DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect
-
+from bootstrap_modal_forms.generic import BSModalDeleteView, BSModalUpdateView
 from .forms import AddIssueForm
 from .models import User, Issue
 
@@ -53,16 +53,18 @@ class ShowIssue(DetailView):
     model = Issue
 
 
-class IssueUpdateView(UpdateView):
+class IssueUpdateView(BSModalUpdateView):
     model = Issue
     fields = ['title',
               'description',
               'priority',
               'status']
+    success_message = 'Success: Book was updated.'
 
 
-class IssueDeleteView(DeleteView):
+class IssueDeleteView(BSModalDeleteView):
     model = Issue
+    success_message = "Usunięto!"
     success_url = reverse_lazy('app:list_issues')
 
 
