@@ -1,0 +1,93 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+  {% if issues %}
+
+    <div class="container-fluid">
+<table class="table table-hover table-dark">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Zgłoszenie</th>
+      <th scope="col">Status</th>
+      <th scope="col">Pryiorytet</th>
+      <th scope="col">Użytkownik</th>
+      <th scope="col">E-mail</th>
+      <th scope="col">Szczegóły</th>
+      <th scope="col">Aktywne</th>
+      <th scope="col">Rozpoczęcie</th>
+      <th scope="col">Zamknięte</th>
+    </tr>
+  </thead>
+        {% for i in issues %}
+{#            TODO tooltip w tabeli #}
+            <tr>
+      <th scope="row"><button type="button" class="btn btn-link" data-container="body" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="{{ i.id }}">{{ i.id|truncatechars:6 }}</button></th>
+      <td>{{ i.title }}</td>
+      <td>{{ i.get_status_display }}</td>
+      <td>{{ i.get_priority_display }}</td>
+      <td>{{ i.user.first_name }} {{ i.user.last_name }}</td>
+      <td>{{ i.email }}</td>
+      <td><a title="Zobacz" href="{{ i.get_absolute_url }}"><i class="material-icons material-icons-menu">launch</i>Zobacz</a></td>
+      <td>{% if i.active == True %}<i class="material-icons material-icons-menu">check_circle</i>{% else %}<i class="material-icons material-icons-menu">remove_circle</i>{% endif %}</td>
+      <td>{{ i.date_start }}</td>
+      <td>{{ i.date_end|default_if_none:" ---"}}</td>
+    </tr>
+        </div>
+    {% endfor %}
+        </tbody>
+</table>
+  {% else %}
+    <p>There are no books in the library.</p>
+  {% endif %}
+{% if is_paginated %}
+<nav aria-label="Page navigation example">
+<div class="container my-4"></div>
+    <ul class="pagination justify-content-center pagination">
+        {% if page_obj.has_previous %}
+          <!-- If it ain't a search result display, don't append the search query
+               to the URL. -->
+          {% if not search %}
+          <li class="page-item">
+              <a class="page-link" href="{% url 'app:list_issues' %}?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          {% else %}
+          <!-- Append the searched query to the URL, so that on a search results page,
+               the pagination don't revert to listing all the listview items. -->
+            <li class="page-item">
+              <a class="page-link" href="{% url 'app:list_issues' %}?{{search}}&page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          {% endif %}
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+        </li>
+        {% endif %}
+        {% for object in page_obj.paginator.page_range %}
+            <li class="page-item"><a class="page-link" href="{% url 'app:list_issues' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+          {% if not search %}
+          <li class="page-item">
+              <a class="page-link" href="{% url 'app:list_issues' %}?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="{% url 'app:list_issues' %}?{{search}}&page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% endif %}
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+</div>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();
+});
+</script>
+  {% endblock %}

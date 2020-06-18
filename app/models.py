@@ -1,12 +1,12 @@
 import uuid
 
-from tinymce import HTMLField
-
-from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
+from django.db import models
 from django.urls import reverse
+from django.utils import timezone
+
+from tinymce import HTMLField
 
 from app.choices import PRIORITY, STATUS
 
@@ -40,6 +40,7 @@ class Issue(models.Model):
         # return f"{self.id}"
         return reverse('app:show_issue', args=[self.id])
 
+
 class Comments(models.Model):
     id = models.IntegerField(primary_key=True)
     content = HTMLField('Content')
@@ -47,8 +48,3 @@ class Comments(models.Model):
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name='comments')
     creation_date = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering =['creation_date']
-
-    def __str__(self):
-        return '{} [{}]'.format(self.content, self.user)

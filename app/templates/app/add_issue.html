@@ -3,14 +3,14 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container">
-    {% if error %}
-        <div "alert alert-warning" role="alert">{{error}}</div>
-    {% endif %}
-  <form method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Wyślij</button>
-  </form>
-</div>
+    <div class="container">
+        {% if error %}
+            <div "alert alert-warning" role="alert">{{ error }}</div>
+        {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Wyślij</button>
+    </form>
+    </div>
 {% endblock %}
