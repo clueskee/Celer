@@ -1,7 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import AddIssueView, HomeView, IssueView, IssueListView, IssueUpdateView, IssueDeleteView, AddCommentView
+from .views import AddIssueView, HomeView, IssueView, IssueListView, IssueUpdateView, IssueDeleteView, AddCommentView, SignUpView
 from .forms import UserLoginForm
+
 
 app_name = 'app'
 urlpatterns = [
@@ -14,6 +15,7 @@ urlpatterns = [
     path('comment/<id>', AddCommentView.as_view(), name='comment_issue'),
     path('logout/', auth_views.LogoutView.as_view(next_page='app:home'), name='logout'),
     path('login/', auth_views.LoginView.as_view(authentication_form=UserLoginForm), name='login'),
+    path('signup/', SignUpView.as_view(), name='signup'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='pass_reset'),
     # path('login/', auth_views.PasswordResetView.as_view(), name='pass_reset'),
 ]

@@ -20,8 +20,12 @@ class Company(models.Model):
     address = models.CharField(max_length=256, null=True)
     phone = models.CharField(max_length=32, null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class CustomUser(AbstractUser):
+    username = None
     company = models.ForeignKey(Company, null=True, on_delete=models.SET_NULL)
     phone = models.CharField(max_length=32, null=True)
     email = models.EmailField(_('email address'), unique=True)
