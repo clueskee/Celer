@@ -3,6 +3,10 @@ from django.contrib.auth.forms import AuthenticationForm
 
 from bootstrap_modal_forms.forms import BSModalForm
 from crispy_forms.helper import FormHelper
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+
+from .models import CustomUser
+
 
 from .models import Issue, Comments
 
@@ -38,7 +42,12 @@ class AddIssueForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comments
-        fields = ('content',)
+        fields = ('content', 'issue', 'user')
+
+        widgets = {
+            'issue': forms.HiddenInput(),
+            'user': forms.HiddenInput(),
+        }
 
 
 class UpdateIssueForm(BSModalForm):
@@ -47,3 +56,16 @@ class UpdateIssueForm(BSModalForm):
         fields = ['description',
                   'priority',
                   'status']
+
+class CustomUserCreationForm(UserCreationForm):
+
+    class Meta(UserCreationForm):
+        model = CustomUser
+        fields = ('email',)
+
+
+class CustomUserChangeForm(UserChangeForm):
+
+    class Meta:
+        model = CustomUser
+        fields = ('email',)

@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import AddIssueView, HomeView, IssueView, IssueListView, IssueUpdateView, IssueDeleteView
+from .views import AddIssueView, HomeView, IssueView, IssueListView, IssueUpdateView, IssueDeleteView, AddCommentView
 from .forms import UserLoginForm
 
 app_name = 'app'
@@ -11,6 +11,7 @@ urlpatterns = [
     path('list/', IssueListView.as_view(), name='list_issues'),
     path('update/<pk>', IssueUpdateView.as_view(), name='update_issue'),
     path('delete/<pk>', IssueDeleteView.as_view(), name='delete_issue'),
+    path('comment/<id>', AddCommentView.as_view(), name='comment_issue'),
     path('logout/', auth_views.LogoutView.as_view(next_page='app:home'), name='logout'),
     path('login/', auth_views.LoginView.as_view(authentication_form=UserLoginForm), name='login'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='pass_reset'),

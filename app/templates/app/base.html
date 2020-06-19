@@ -54,7 +54,7 @@
           <ul class="navbar-nav mr-auto">
               {% if user.is_authenticated %}
             <li class="nav-item active">
-              <a class="nav-link" href="#">Zalogowany jako: {{ user.first_name }} {{ user.last_name }}</a>
+              <a class="nav-link" href="#">Zalogowany jako: {{ user.email }}</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link" title="Wyloguj" href="{% url 'app:logout' %}"><i class="material-icons material-icons-menu">logout</i>Wyloguj</a>

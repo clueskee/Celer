@@ -1,16 +1,17 @@
+from django.http import HttpResponseRedirect
 from django.views import View
 from django.views.generic import FormView, DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect
 from bootstrap_modal_forms.generic import BSModalDeleteView, BSModalUpdateView, BSModalCreateView
-from .forms import AddIssueForm, UpdateIssueForm
-from .models import User, Issue, Comments
+from .forms import AddIssueForm, UpdateIssueForm, CommentForm
+from .models import CustomUser, Issue, Comments
 
 
 class HomeView(View):
 
     def get(self, request):
-        users = User.objects.count()
+        users = CustomUser.objects.count()
         issues = Issue.objects.count()
         closed_issues = Issue.objects.filter(active=True).count()
         context = {'users': users,
@@ -29,13 +30,13 @@ class AddIssueView(FormView):
         issue = form.instance
         try:
             # issue.user = self.request.user # TODO: sprawdzić czy działa poprawnie
-            issue.user = User.objects.get(pk=self.request.user.id)
+            issue.user = CustomUser.objects.get(pk=self.request.user.id)
         except Exception as e:
             try:
-                issue.user = User.objects.get(email=issue.email)
+                issue.user = CustomUser.objects.get(email=issue.email)
             except Exception as e:
                 user_name, user_domain = issue.email.split('@', 2)
-                user = User.objects.create_user(
+                user = CustomUser.objects.create_user(
                     username=user_name,
                     email=issue.email
                 )
@@ -73,5 +74,45 @@ class IssueListView(ListView):
     paginate_by = 10
 
 
-class AddCommentView(BSModalCreateView):
-    pass
+# class AddCommentView(FormView):
+#     form_class = CommentForm
+#     template_name = 'app/comment.html'
+#     success_message = 'Komentarz dodano.'
+#     success_url = reverse_lazy('app:list_issues')
+
+    # def __init__(self, **kwargs):
+    #     for key, value in kwargs.items():
+    #         setattr(self, key, value)
+    #
+    # def get_initial(self):
+    #     initial = super().get_initial()
+    #     # To jest po to żeby sprawdzić że initial działa
+    #     initial['issue'] = Issue.objects.get(id='2ac0bf74-c0d9-4f00-9ed2-40860c2fc4ac')
+    #     # initial['issue'] = Issue.objects.get(id)
+    #     return initial
+
+class AddCommentView(FormView):
+    form_class = CommentForm
+    template_name = 'app/comment.html'
+    success_message = 'Komentarz dodano.'
+    success_url = reverse_lazy('app:list_issues')
+
+    def get(self, request, id):
+        issue = Issue.objects.get(id=id)
+        user = self.request.user
+        initial_data = {'issue': issue, 'user': user}
+        form = self.form_class(initial=initial_data)
+        context = {'form': form}
+
+        return render(request, self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            comment = form.save()
+        else:
+            print(form.errors)
+
+        return HttpResponseRedirect(reverse('app:show_issue', kwargs={'pk': comment.issue.id}))

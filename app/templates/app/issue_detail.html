@@ -37,6 +37,18 @@
             </div>
         </div>
     </div>
+    {% for c in issue.comments.all %}
+        <div class="container-lg mt-4">
+        <div class="card">
+  <h5 class="card-header">{{ c.creation_date }}</h5>
+  <div class="card-body">
+    <h5 class="card-title">{{ c.user }}</h5>
+    <p class="card-text">{{ c.content|safe }}</p>
+  </div>
+</div>
+        </div>
+    {% endfor %}
+    <button class="comment-issue btn btn-danger" type="button" name="button">Dodaj komentarz</button>
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -54,15 +66,12 @@
              });
         });
 </script>
-    {% for c in issue.comments.all %}
-        <div class="container-lg mt-4">
-        <div class="card">
-  <h5 class="card-header">{{ c.creation_date }}</h5>
-  <div class="card-body">
-    <h5 class="card-title">{{ c.user }}</h5>
-    <p class="card-text">{{ c.content|safe }}</p>
-  </div>
-</div>
-        </div>
-    {% endfor %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $(".comment-issue").modalForm({
+                formURL: "{% url 'app:comment_issue' object.id %}"
+             });
+        });
+</script>
 {% endblock %}

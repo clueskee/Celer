@@ -26,7 +26,7 @@
       <td>{{ i.title }}</td>
       <td>{{ i.get_status_display }}</td>
       <td>{{ i.get_priority_display }}</td>
-      <td>{{ i.user.first_name }} {{ i.user.last_name }}</td>
+      <td>{{ i.user.first_name }} {{ i.user.last_name }} ({{ i.user.company.name }})</td>
       <td>{{ i.email }}</td>
       <td><a title="Zobacz" href="{{ i.get_absolute_url }}"><i class="material-icons material-icons-menu">launch</i>Zobacz</a></td>
       <td>{% if i.active == True %}<i class="material-icons material-icons-menu">check_circle</i>{% else %}<i class="material-icons material-icons-menu">remove_circle</i>{% endif %}</td>

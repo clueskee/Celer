@@ -7,8 +7,11 @@ from django.urls import reverse
 from django.utils import timezone
 
 from tinymce import HTMLField
-
+from .managers import CustomUserManager
 from app.choices import PRIORITY, STATUS
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import ugettext_lazy as _
 
 
 class Company(models.Model):
@@ -18,10 +21,18 @@ class Company(models.Model):
     phone = models.CharField(max_length=32, null=True)
 
 
-class User(AbstractUser):
+class CustomUser(AbstractUser):
     company = models.ForeignKey(Company, null=True, on_delete=models.SET_NULL)
     phone = models.CharField(max_length=32, null=True)
+    email = models.EmailField(_('email address'), unique=True)
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
 
 class Issue(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
