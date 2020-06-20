@@ -22,7 +22,7 @@
         {% for i in issues %}
 {#            TODO tooltip w tabeli #}
             <tr>
-      <th scope="row"><button type="button" class="btn btn-link" data-container="body" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="{{ i.id }}">{{ i.id|truncatechars:6 }}</button></th>
+      <th scope="row"><button type="button" class="btn btn-info" data-container="body" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="{{ i.id }}">{{ i.id|truncatechars:6 }}</button></th>
       <td>{{ i.title }}</td>
       <td>{{ i.get_status_display }}</td>
       <td>{{ i.get_priority_display }}</td>

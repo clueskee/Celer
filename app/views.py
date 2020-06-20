@@ -1,11 +1,12 @@
-from django.http import HttpResponseRedirect
-from django.views import View
-from django.views.generic import FormView, DetailView, ListView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy, reverse
-from django.shortcuts import render, redirect
 from bootstrap_modal_forms.generic import BSModalDeleteView, BSModalUpdateView, BSModalCreateView
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
+from django.views import View
+from django.views.generic import FormView, DetailView, ListView
+
 from .forms import AddIssueForm, UpdateIssueForm, CommentForm, CustomUserCreationForm
-from .models import CustomUser, Issue, Comments
+from .models import CustomUser, Issue
 
 
 class HomeView(View):
@@ -53,7 +54,6 @@ class IssueView(DetailView):
     model = Issue
 
 
-
 class IssueUpdateView(BSModalUpdateView):
     model = Issue
     template_name = 'app/update_issue.html'
@@ -73,6 +73,7 @@ class IssueListView(ListView):
     context_object_name = 'issues'
     paginate_by = 10
 
+
 class AddCommentView(FormView):
     form_class = CommentForm
     template_name = 'app/comment.html'
@@ -87,7 +88,8 @@ class AddCommentView(FormView):
         context = {'form': form}
 
         return render(request, self.template_name, context=context)
-# TODO zmienić post na form_valid i > return.
+
+    # TODO zmienić post na form_valid i > return.
     def post(self, request, *args, **kwargs):
 
         form = self.form_class(request.POST)
@@ -98,8 +100,6 @@ class AddCommentView(FormView):
             print(form.errors)
 
         return HttpResponseRedirect(reverse('app:show_issue', kwargs={'pk': comment.issue.id}))
-
-
 
 
 class SignUpView(BSModalCreateView):

@@ -38,6 +38,7 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+
 class Issue(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     title = models.CharField(max_length=256, null=False)
@@ -46,7 +47,7 @@ class Issue(models.Model):
     date_start = models.DateTimeField(default=timezone.now)
     date_end = models.DateTimeField(null=True)
     priority = models.IntegerField(choices=PRIORITY, default=1)
-    status = models.IntegerField(choices=STATUS, default=1)
+    status = models.IntegerField(choices=STATUS, default=0)
     active = models.BooleanField(default=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 

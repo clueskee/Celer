@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
-
-<div class="container">
+{{ form.media }}
+<div class="container m-2">
     {% if error %}
         <div "alert alert-warning" role="alert">{{ error }}</div>
     {% endif %}

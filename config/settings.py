@@ -126,6 +126,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# Project settings:
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 AUTH_USER_MODEL = 'app.CustomUser'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

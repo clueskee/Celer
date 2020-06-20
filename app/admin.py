@@ -6,6 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 from app.forms import CustomUserCreationForm, CustomUserChangeForm
 from app.models import CustomUser
 
+
 @admin.register(Issue)
 class IssueModelAdmin(admin.ModelAdmin):
     list_display = ('title',
@@ -47,3 +48,4 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.site_header = "Celer Admin"
