@@ -1,4 +1,5 @@
 from bootstrap_modal_forms.generic import BSModalDeleteView, BSModalUpdateView, BSModalCreateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -9,6 +10,7 @@ from django.views.generic import FormView, DetailView, ListView, RedirectView
 from .forms import AddIssueForm, UpdateIssueForm, CommentForm, CustomUserCreationForm
 from .models import CustomUser, Issue, Comments
 
+# TODO trzeba przerobić widoki oparte na BSModal tak żeby obsługiwać logowanie w wyskakujących okienkach
 
 class HomeView(View):
 
@@ -50,32 +52,38 @@ class AddIssueView(FormView):
         return redirect(reverse_lazy('app:show_issue', kwargs={'pk': issue.id}))
 
 
-class IssueView(DetailView):
+class IssueView(LoginRequiredMixin, DetailView):
     # TODO pokazywanie plików z uploadu
     model = Issue
 
 
-class IssueUpdateView(BSModalUpdateView):
+class IssueUpdateView(LoginRequiredMixin, UserPassesTestMixin, BSModalUpdateView):
     model = Issue
     template_name = 'app/update_issue.html'
     form_class = UpdateIssueForm
     success_message = 'Zapisano.'
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.user == self.request.user
 
-class IssueDeleteView(BSModalDeleteView):
+class IssueDeleteView(LoginRequiredMixin, UserPassesTestMixin, BSModalDeleteView):
     model = Issue
     success_message = "Usunięto!"
     success_url = reverse_lazy('app:list_issues')
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.user == self.request.user
 
-class IssueListView(ListView):
+class IssueListView(LoginRequiredMixin, ListView):
     template_name = 'app/issue_table.html'
     queryset = Issue.objects.all()
     context_object_name = 'issues'
     paginate_by = 10
 
 
-class AddCommentView(FormView):
+class AddCommentView(LoginRequiredMixin, FormView):
     form_class = CommentForm
     template_name = 'app/comment.html'
     success_message = 'Komentarz dodano.'
@@ -110,13 +118,13 @@ class SignUpView(BSModalCreateView):
     success_url = reverse_lazy('app:home')
 
 
-class CommentsDeleteView(BSModalDeleteView):
+class CommentsDeleteView(LoginRequiredMixin, BSModalDeleteView):
     model = Comments
     success_message = "Usunięto!"
     success_url = reverse_lazy('app:list_issues')
 
 
-class IssueEndView(RedirectView):
+class IssueEndView(LoginRequiredMixin, RedirectView):
     permanent = False
     query_string = True
     pattern_name = 'app:show_issue'

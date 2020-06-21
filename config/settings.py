@@ -133,3 +133,6 @@ STATICFILES_DIRS = [
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 AUTH_USER_MODEL = 'app.CustomUser'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+LOGIN_URL = 'app:login'
+LOGIN_REDIRECT_URL = 'app:home'
+JET_SIDE_MENU_COMPACT = True
