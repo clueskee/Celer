@@ -17,6 +17,7 @@ class IssueModelAdmin(admin.ModelAdmin):
                     'user')
 
     ordering = ('date_start', 'active')
+    search_fields = ('title', )
 
 @admin.register(Comments)
 class CommentsModelAdmin(admin.ModelAdmin):

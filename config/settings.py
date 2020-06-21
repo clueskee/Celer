@@ -136,3 +136,16 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGIN_URL = 'app:login'
 LOGIN_REDIRECT_URL = 'app:home'
 JET_SIDE_MENU_COMPACT = True
+
+JET_SIDE_MENU_ITEMS = [
+    {'app_label': 'Celer', 'items': [
+        {'name': 'app.issue', 'label': 'Zgłoszenia'},
+        {'name': 'app.comments', 'label': 'Komentarze'},
+        {'name': 'app.customuser', 'label': 'Użytkownicy'},
+        {'name': 'app.company', 'label': 'Firmy'},
+
+    ]},
+    {'app_label': 'auth', 'items': [
+        {'name': 'group'},
+    ]},
+]

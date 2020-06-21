@@ -1,6 +1,7 @@
 {% extends 'app/base.html' %}
 {% load static %}
-{% block content %}
+{% block content %}<div class="container m-3"><h1>Zgłoszenia:</h1></div>
+    <div class="container m-3 float-right"><a href="{% url 'app:add_issue' %}" class="btn btn-success" role="button">Nowe Zgłoszenie</a></div>
   {% if issues %}
 
     <div class="container-fluid">
