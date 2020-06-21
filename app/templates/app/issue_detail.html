@@ -1,9 +1,9 @@
 {% extends 'app/base.html' %}
 {% load static %}
 {% block content %}
-
+    <div class="container-lg"><h1>Zgłoszenie {{ object.id }}:</h1></div>
     <div class="container-lg">
-        <div class="card">
+        <div class="card text-white bg-dark mb-3">
             <div class="card-body elegant-color white-text rounded-bottom">
 
                 <!-- Social shares button -->
@@ -15,16 +15,21 @@
                 <div class="text-secondary"><p><i
                         class="material-icons material-icons-menu">calendar_today</i>{{ object.date_start }}</p>
                     <p>
-                        <i class="material-icons material-icons-menu">account_circle</i>{{ object.user_id.name }} {{ object.user_id.surname }}
+                        <i class="material-icons material-icons-menu">account_circle</i>{{ object.user.first_name }} {{ object.user.last_name }}
                     </p></div>
 
                 <p class="card-text mb-4">{{ object.description|safe }}</p>
                 <!-- Link -->
-                <div class="float-right">
-                    <button type="button" class="btn btn-success">Zamknij</button>
+                <div class="float-left">
+                    <a href="{% url 'app:list_issues' %}" class="btn btn-secondary" role="button">Wróć</a>
+                </div>
+                {% if object.user == user %}
+                    <div class="float-right">
+                    <a href="{% url 'app:end_issue' object.id %}" class="btn btn-success" role="button">Wróć</a>
                     <button class="update-issue btn btn-warning" type="button" name="button">Zmień</button>
                     <button class="delete-issue btn btn-danger" type="button" name="button">Usuń</button>
-
+                    <button class="comment-issue btn btn-danger" type="button" name="button">Dodaj komentarz</button>
+                {% endif %}
                 </div>
             </div>
 
@@ -39,17 +44,26 @@
     </div>
     {% for c in issue.comments.all %}
         <div class="container-lg mt-4">
-        <div class="card">
-  <h5 class="card-header">{{ c.creation_date }}</h5>
-  <div class="card-body">
-    <h5 class="card-title">{{ c.user }}</h5>
-    <p class="card-text">{{ c.content|safe }}</p>
-  </div>
-</div>
+            <div class="card text-white bg-dark mb-3">
+                <p class="card-header">{{ c.creation_date }}{% if c.user == user %}
+                    <button class="comment-delete btn btn-danger float-right" type="button" name="button">Usuń
+                        komentarz
+                    </button>{% endif %}</p>
+                <div class="card-body">
+                    <h6 class="card-title">{{ c.user.first_name }} {{ c.user.last_name }}:</h6>
+                    <p class="card-text">{{ c.content|safe }}</p>
+                </div>
+            </div>
         </div>
-    {% endfor %}
+        <script type="text/javascript">
+            $(document).ready(function () {
 
-    <button class="comment-issue btn btn-danger" type="button" name="button">Dodaj komentarz</button>
+                $(".comment-delete").modalForm({
+                    formURL: "{% url 'app:comment_delete' c.id %}"
+                });
+            });
+        </script>
+    {% endfor %}
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -58,21 +72,21 @@
             });
         });
     </script>
-{#     TODO To powinno być w jednym skrypcie#}
+    {#     TODO To powinno być w jednym skrypcie#}
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             $(".update-issue").modalForm({
                 formURL: "{% url 'app:update_issue' object.id %}"
-             });
+            });
         });
-</script>
+    </script>
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             $(".comment-issue").modalForm({
                 formURL: "{% url 'app:comment_issue' object.id %}"
-             });
+            });
         });
-</script>
+    </script>
 {% endblock %}

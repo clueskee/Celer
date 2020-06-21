@@ -1,12 +1,13 @@
 from bootstrap_modal_forms.generic import BSModalDeleteView, BSModalUpdateView, BSModalCreateView
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
+from django.utils import timezone
 from django.views import View
-from django.views.generic import FormView, DetailView, ListView
+from django.views.generic import FormView, DetailView, ListView, RedirectView
 
 from .forms import AddIssueForm, UpdateIssueForm, CommentForm, CustomUserCreationForm
-from .models import CustomUser, Issue
+from .models import CustomUser, Issue, Comments
 
 
 class HomeView(View):
@@ -58,7 +59,7 @@ class IssueUpdateView(BSModalUpdateView):
     model = Issue
     template_name = 'app/update_issue.html'
     form_class = UpdateIssueForm
-    success_message = 'Success: Book was updated.'
+    success_message = 'Zapisano.'
 
 
 class IssueDeleteView(BSModalDeleteView):
@@ -105,5 +106,28 @@ class AddCommentView(FormView):
 class SignUpView(BSModalCreateView):
     form_class = CustomUserCreationForm
     template_name = 'app/signup.html'
-    success_message = 'Success: Sign up succeeded. You can now Log in.'
+    success_message = 'Zarejestrowao.'
     success_url = reverse_lazy('app:home')
+
+
+class CommentsDeleteView(BSModalDeleteView):
+    model = Comments
+    success_message = "Usunięto!"
+    success_url = reverse_lazy('app:list_issues')
+
+
+class IssueEndView(RedirectView):
+    permanent = False
+    query_string = True
+    pattern_name = 'app:show_issue'
+
+    def get_redirect_url(self, *args, **kwargs):
+        issue = get_object_or_404(Issue, pk=kwargs['id'])
+        issue.active = False
+        issue.date_end = timezone.now()
+        issue.save()
+        return reverse_lazy('app:list_issues')
+
+
+class ContactView(FormView):
+    pass

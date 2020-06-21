@@ -20,6 +20,7 @@
     </tr>
   </thead>
         {% for i in issues %}
+    {% if i.user.company == user.company  %}
 {#            TODO tooltip w tabeli #}
             <tr>
       <th scope="row"><button type="button" class="btn btn-info" data-container="body" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="{{ i.id }}">{{ i.id|truncatechars:6 }}</button></th>
@@ -33,7 +34,9 @@
       <td>{{ i.date_start }}</td>
       <td>{{ i.date_end|default_if_none:" ---"}}</td>
     </tr>
+            {% endif %}
         </div>
+
     {% endfor %}
         </tbody>
 </table>

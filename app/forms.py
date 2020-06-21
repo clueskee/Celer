@@ -1,3 +1,4 @@
+from bootstrap_modal_forms.generic import BSModalUpdateView
 from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
@@ -54,8 +55,7 @@ class CommentForm(forms.ModelForm):
 class UpdateIssueForm(BSModalForm):
     class Meta:
         model = Issue
-        fields = ['description',
-                  'priority',
+        fields = ['priority',
                   'status']
 
 class CustomUserCreationForm(UserCreationForm):
@@ -76,3 +76,10 @@ class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin,
     class Meta:
         model = CustomUser
         fields = ['email', 'first_name', 'last_name', 'company', 'password1', 'password2']
+
+
+class ContactForm(forms.Form):
+    from_email = forms.EmailField(required=True)
+    subject = forms.CharField(required=True)
+    message = forms.CharField(widget=forms.Textarea, required=True)
+

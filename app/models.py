@@ -51,10 +51,13 @@ class Issue(models.Model):
     active = models.BooleanField(default=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
+
     # TODO: Sprawdź czy to najlepszy sposób:
     def get_absolute_url(self):
         # return f"{self.id}"
         return reverse('app:show_issue', args=[self.id])
+    def __str__(self):
+        return str(self.id)
 
 
 class Comments(models.Model):
@@ -64,3 +67,5 @@ class Comments(models.Model):
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name='comments')
     creation_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.issue} {self.user} {self.creation_date}"

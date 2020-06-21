@@ -3,9 +3,10 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    <div class="container"><h1>Nowe Zgłoszenie:</h1></div>
     <div class="container">
         {% if error %}
-            <div "alert alert-warning" role="alert">{{ error }}</div>
+            <div class="alert alert-warning" role="alert">{{ error }}</div>
         {% endif %}
     <form method="post">
         {% csrf_token %}

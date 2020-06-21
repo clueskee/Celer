@@ -6,7 +6,7 @@
     {% endif %}
 <form method="post">
     {% csrf_token %}
-    <p>Are you sure you want to delete "{{ object.title }}"?</p>
+    <p>Usunąć komentarz "{{ object }}"?</p>
     <button type="submit" class="btn btn-primary">Potwierdź</button>
 </form>
 </div>
