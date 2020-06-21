@@ -1,0 +1,19 @@
+{% load humanize %}
+
+<ul>
+    {% for issue in module.children %}
+        <li>
+            <span class="float-right">
+                <span class="dim">
+                    {{ ticket.date_start|naturalday }} <span class="icon-clock tooltip" title="{{ issue.date_start }}"></span>
+                </span>
+            </span>
+
+            <a href="{{ issue.get_admin_url }}">{{ issue.name }}</a>
+        </li>
+    {% empty %}
+        <li>
+            Nothing to show
+        </li>
+    {% endfor %}
+</ul>
