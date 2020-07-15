@@ -31,8 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'jet.dashboard',
-    'jet',
+    'admin_tools',
+    'admin_tools.theming',
+    'admin_tools.menu',
+    'admin_tools.dashboard',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,7 +63,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -69,6 +70,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'loaders': [
+                'django.template.loaders.app_directories.Loader',
+                'admin_tools.template_loaders.Loader'
+            ]
         },
     },
 ]
@@ -135,16 +140,3 @@ AUTH_USER_MODEL = 'app.CustomUser'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGIN_URL = 'app:login'
 LOGIN_REDIRECT_URL = 'app:home'
-JET_SIDE_MENU_COMPACT = True
-JET_SIDE_MENU_ITEMS = [
-    {'app_label': 'Celer', 'items': [
-        {'name': 'app.issue', 'label': 'Zgłoszenia'},
-        {'name': 'app.comments', 'label': 'Komentarze'},
-        {'name': 'app.customuser', 'label': 'Użytkownicy'},
-        {'name': 'app.company', 'label': 'Firmy'},
-
-    ]},
-    {'app_label': 'auth', 'items': [
-        {'name': 'group'},
-    ]},
-]
