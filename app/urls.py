@@ -4,6 +4,8 @@ from django.urls import path
 from .forms import UserLoginForm
 from .views import AddIssueView, HomeView, IssueView, IssueListView, IssueUpdateView, IssueDeleteView, AddCommentView, \
     SignUpView, CommentsDeleteView, IssueEndView, ContactView
+from django.conf.urls.static import static
+from django.conf import settings
 
 app_name = 'app'
 urlpatterns = [
@@ -22,4 +24,5 @@ urlpatterns = [
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='pass_reset'),
     path('contact/', ContactView.as_view(), name='contact'),
     # path('login/', auth_views.PasswordResetView.as_view(), name='pass_reset'),
-]
+ ]
+

@@ -15,10 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from filebrowser.sites import site
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
+    path('admin/filebrowser/', site.urls),
     path('admin_tools', include('admin_tools.urls')),
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
     path('celer/', include('app.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# # TODO To trzeba zmienić w przypadku przejścia na produkcję!
+# #  (https://docs.djangoproject.com/en/2.1/howto/static-files/#serving-files-uploaded-by-a-user-during-development)
