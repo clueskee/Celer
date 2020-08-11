@@ -31,11 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'admin_tools',
-    'admin_tools.theming',
-    'admin_tools.menu',
-    'admin_tools.dashboard',
-    'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -73,7 +68,7 @@ TEMPLATES = [
             ],
             'loaders': [
                 'django.template.loaders.app_directories.Loader',
-                'admin_tools.template_loaders.Loader'
+                # 'admin_tools.template_loaders.Loader'
             ]
         },
     },
@@ -141,7 +136,5 @@ AUTH_USER_MODEL = 'app.CustomUser'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGIN_URL = 'app:login'
 LOGIN_REDIRECT_URL = 'app:home'
-ADMIN_TOOLS_MENU = 'app.menu.CustomMenu'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-FILEBROWSER_DIRECTORY = ''

@@ -40,7 +40,8 @@ class CustomUser(AbstractUser):
 
 
 class Issue(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=256, null=False)
     email = models.EmailField(max_length=254, null=False)
     description = HTMLField('Description')

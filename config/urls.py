@@ -20,8 +20,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/filebrowser/', site.urls),
-    path('admin_tools', include('admin_tools.urls')),
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
     path('celer/', include('app.urls')),

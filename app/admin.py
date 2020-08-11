@@ -61,6 +61,3 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
 
-
-# admin.site.register(CustomUserAdmin)
-admin.site.site_header = "Celer Admin"
