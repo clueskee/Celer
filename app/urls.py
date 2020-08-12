@@ -2,7 +2,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from .forms import UserLoginForm
-from .views import AddIssueView, HomeView, IssueView, IssueListView, IssueUpdateView, IssueDeleteView, AddCommentView, \
+from .views import AddIssueView, HomeView, IssueView, IssueViewWithOutLogin, IssueListView, IssueUpdateView, IssueDeleteView, AddCommentView, \
     SignUpView, CommentsDeleteView, IssueEndView, ContactView
 from django.conf.urls.static import static
 from django.conf import settings
@@ -11,7 +11,8 @@ app_name = 'app'
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('add/', AddIssueView.as_view(), name='add_issue'),
-    path('show/<pk>', IssueView.as_view(), name='show_issue'),
+    path('open/<pk>', IssueView.as_view(), name='show_issue'),
+    path('show/<uuid>', IssueViewWithOutLogin.as_view(), name='show_nologin'),
     path('list/', IssueListView.as_view(), name='list_issues'),
     path('update/<pk>', IssueUpdateView.as_view(), name='update_issue'),
     path('delete/<pk>', IssueDeleteView.as_view(), name='delete_issue'),

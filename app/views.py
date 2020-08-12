@@ -26,7 +26,7 @@ class HomeView(View):
         return render(request, 'app/home.html', {'context': context})
 
 
-class AddIssueView(FormView):
+class AddIssueView(LoginRequiredMixin, FormView):
     form_class = AddIssueForm
     template_name = 'app/add_issue.html'
 
@@ -55,6 +55,13 @@ class AddIssueView(FormView):
 class IssueView(LoginRequiredMixin, DetailView):
     # TODO pokazywanie plików z uploadu
     model = Issue
+
+
+class IssueViewWithOutLogin(DetailView):
+    model = Issue
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
+
 
 
 class IssueUpdateView(LoginRequiredMixin, UserPassesTestMixin, BSModalUpdateView):
